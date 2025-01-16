@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: shlee # Self-hosted Runner에서 실행
+    runs-on: snms-auth # Self-hosted Runner에서 실행
     steps:
       # 1. 코드 체크아웃
       - name: Checkout repository
