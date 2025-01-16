@@ -1,0 +1,30 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - main # main 브랜치에 푸시될 때 트리거
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: shlee # Self-hosted Runner에서 실행
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. .env.production.local 파일 생성
+      - name: Create .env.production.local file
+        run: |
+          $env:LC_ALL = "C.UTF-8"
+          [System.IO.File]::WriteAllText(".env.production.local", "${{ secrets.ENV_PRODUCTION_LOCAL }}", [System.Text.Encoding]::UTF8)
+
+      # 3. .env.production.local 내용 출력 (디버깅용)
+      - name: Print .env.production.local content
+        run: cat .env.production.local
+
+      # 3. Docker 이미지 빌드
+      - name: Build Docker Image
+        run: |
+          docker build -t snms-auth99 .
